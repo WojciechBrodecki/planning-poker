@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket Test</title>
+</head>
+<body>
+  <h1>Planning Poker WebSocket Test</h1>
+  <button id="createSession">Create Session</button>
+  <button id="joinSession">Join Session</button>
+  <button id="submitEstimate">Submit Estimate</button>
+  <button id="revealEstimates">Reveal Estimates</button>
+  <button id="newRound">New Round</button>
+  <pre id="log"></pre>
+
+  <script>
+    let ws = new WebSocket('ws://localhost:8080'); // Adres serwera WebSocket
+    let sessionId;
+    let playerId;
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket');
+      logMessage('Connected to WebSocket');
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      logMessage(`Received: ${event.data}`);
+
+      switch (data.action) {
+        case 'sessionCreated':
+          sessionId = data.sessionId;
+          logMessage(`Session created with ID: ${sessionId}`);
+          break;
+
+        case 'joinedSession':
+          playerId = data.playerId;
+          logMessage(`Joined session as player: ${playerId}`);
+          break;
+
+        case 'estimateSubmitted':
+          logMessage(`Estimate submitted for player: ${data.playerId}`);
+          break;
+
+        case 'estimatesRevealed':
+          logMessage('Estimates revealed');
+          break;
+
+        case 'newRoundStarted':
+          logMessage('New round started');
+          break;
+
+        case 'roundsHistory':
+          logMessage(`Rounds history: ${JSON.stringify(data.rounds)}`);
+          break;
+
+        default:
+          logMessage(`Unknown action: ${data.action}`);
+          break;
+      }
+    };
+
+    ws.onclose = () => {
+      logMessage('WebSocket connection closed');
+    };
+
+    function logMessage(message) {
+      const log = document.getElementById('log');
+      log.textContent += message + '\n';
+    }
+
+    document.getElementById('createSession').onclick = () => {
+      ws.send(JSON.stringify({ action: 'createSession' }));
+    };
+
+    document.getElementById('joinSession').onclick = () => {
+      if (sessionId) {
+        ws.send(JSON.stringify({ action: 'joinSession', sessionId, playerName: 'Player 1' }));
+      } else {
+        logMessage('No sessionId found. Create a session first.');
+      }
+    };
+
+    document.getElementById('submitEstimate').onclick = () => {
+      if (sessionId && playerId) {
+        ws.send(JSON.stringify({ action: 'submitEstimate', sessionId, playerId, estimate: 5 }));
+      } else {
+        logMessage('No sessionId or playerId found.');
+      }
+    };
+
+    document.getElementById('revealEstimates').onclick = () => {
+      if (sessionId) {
+        ws.send(JSON.stringify({ action: 'revealEstimates', sessionId }));
+      } else {
+        logMessage('No sessionId found.');
+      }
+    };
+
+    document.getElementById('newRound').onclick = () => {
+      if (sessionId) {
+        ws.send(JSON.stringify({ action: 'newRound', sessionId }));
+      } else {
+        logMessage('No sessionId found.');
+      }
+    };
+  </script>
+</body>
+</html>

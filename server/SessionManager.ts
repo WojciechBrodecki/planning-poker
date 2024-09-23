@@ -2,10 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { IGameSession, IRound } from "./interfaces";
 import fs from 'fs';
 import path from 'path';
+import GameSessionManager from './GameSessionManager';
 
 class SessionManager {
   private static instance: SessionManager;
   private sessions: IGameSession[] = [];
+  private sessionManagers: Map<string, GameSessionManager> = new Map();
 
   constructor() { }
 
@@ -62,6 +64,16 @@ class SessionManager {
 
     this.sessions.splice(sessionIndex, 1);
     return true;
+  }
+
+  public getSessionManager(sessionId: string): GameSessionManager {
+    if (this.sessionManagers.has(sessionId)) {
+      return this.sessionManagers.get(sessionId)!;
+    }
+
+    const sessionManager = new GameSessionManager(sessionId);
+    this.sessionManagers.set(sessionId, sessionManager);
+    return sessionManager;
   }
 
   public createNewRound(): IRound {

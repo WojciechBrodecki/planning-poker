@@ -44,7 +44,7 @@ class GameSessionManager {
     return true;
   }
 
-  private revealEstimates(): void {
+  public revealEstimates(): void {
     const round = this.session.currentRound;
 
     this.session.players.forEach(player => {
@@ -80,3 +80,5 @@ class GameSessionManager {
     return this.session.rounds;
   }
 }
+
+export default GameSessionManager;
