@@ -1,16 +1,16 @@
-.gameName{
-    display: flex;
-    align-items: center;
-    color: rgb(42, 116, 165);
-    font-size: 20px;
+.title {
+  display: flex;
+  align-items: center;
+  color: rgb(42, 116, 165);
+  font-size: 20px;
 }
 
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 80%;
-    padding: 15px 50px 0 50px;
-    text-align: center;
-    margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 80%;
+  margin: 0 auto;
+  padding: 15px 50px 0 50px;
+  text-align: center;
 }

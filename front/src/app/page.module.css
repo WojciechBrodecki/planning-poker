@@ -1,11 +1,4 @@
 .page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
   display: grid;
   grid-template-rows: 20px 1fr 20px;
   align-items: center;
@@ -45,3 +38,70 @@ a.secondary {
   overflow: hidden;
 }
 
+.sessionContainer {
+  height: 40vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.createSessionButton {
+  background: #2a74a5;
+  color: white;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  padding: 16px 36px;
+  font-size: 24px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.createSessionButton:hover {
+  background: #468ebf
+}
+
+.dividerOr {
+  text-decoration: underline;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 16px 0;
+}
+
+.joinSessionInfo {
+  font-size: 18px;
+}
+
+.joinSessionButton {
+  background: #2a74a5;
+  color: white;
+  border: 1px solid var(--gray-alpha-200);
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.joinSessionButton:hover {
+  background: #468ebf
+}
+
+.sessionIdInput {
+  width: 30%;
+  max-width: 220px;
+  padding: 8px;
+  background-color: #d2e5f2;
+  font-size: 16px;
+  border: 2px solid #2a74a5;
+  border-radius: 8px;
+}
+
+.sessionIdInput:focus {
+  border: 2px solid #367cab;
+  outline: none;
+}
