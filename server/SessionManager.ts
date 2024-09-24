@@ -20,7 +20,7 @@ class SessionManager {
 
   public createSession(): IGameSession {
     const session: IGameSession = {
-      id: uuidv4(),
+      id: uuidv4().slice(0, 8),
       players: [],
       rounds: [],
       currentRound: this.createNewRound(),
@@ -33,7 +33,7 @@ class SessionManager {
     return this.sessions.find(session => session.id === sessionId);
   }
 
-  public addPlayerToSession(sessionId: string, playerName: string) {
+  public addPlayerToSession(sessionId: string, playerName: string, ws: any): void {
     const session = this.sessions.find(s => s.id === sessionId);
     if (!session) {
       throw new Error('Session not found');
@@ -49,6 +49,17 @@ class SessionManager {
       name: playerName,
       estimate: null,
       confirmed: false,
+      ws,
+    });
+
+    console.log(`Players in session ${sessionId}: ${session.players.map(p => p.name).join(', ')}`);
+
+    const playerNames = session.players.map(player => player.name);
+    session.players.forEach(player => {
+      player.ws.send(JSON.stringify({
+        action: 'playerJoined',
+        players: playerNames
+      }));
     });
   }
 

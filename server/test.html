@@ -8,6 +8,8 @@
 <body>
   <h1>Planning Poker WebSocket Test</h1>
   <button id="createSession">Create Session</button>
+  <input type="text" id="playerName" placeholder="Enter player name">
+  <input type="text" id="sessionIdInput" placeholder="Enter session ID">
   <button id="joinSession">Join Session</button>
   <button id="submitEstimate">Submit Estimate</button>
   <button id="revealEstimates">Reveal Estimates</button>
@@ -17,7 +19,19 @@
   <script>
     let ws = new WebSocket('ws://localhost:8080'); // Adres serwera WebSocket
     let sessionId;
-    let playerId;
+
+    // Funkcja do ustawiania sessionId z URL
+    function setSessionIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('sessionId');
+      if (id) {
+        sessionId = id;
+        logMessage(`Session ID set from URL: ${sessionId}`);
+      }
+    }
+
+    // Ustaw sessionId na podstawie URL
+    setSessionIdFromUrl();
 
     ws.onopen = () => {
       console.log('Connected to WebSocket');
@@ -35,12 +49,11 @@
           break;
 
         case 'joinedSession':
-          playerId = data.playerId;
-          logMessage(`Joined session as player: ${playerId}`);
+          logMessage(`Joined session as player: ${data.playerName}`);
           break;
 
         case 'estimateSubmitted':
-          logMessage(`Estimate submitted for player: ${data.playerId}`);
+          logMessage(`Estimate submitted for player: ${data.playerName}`);
           break;
 
         case 'estimatesRevealed':
@@ -75,18 +88,23 @@
     };
 
     document.getElementById('joinSession').onclick = () => {
-      if (sessionId) {
-        ws.send(JSON.stringify({ action: 'joinSession', sessionId, playerName: 'Player 1' }));
+      const playerName = document.getElementById('playerName').value;
+      const sessionIdInput = document.getElementById('sessionIdInput').value;
+      const idToJoin = sessionIdInput || sessionId; // Jeśli pole jest puste, użyj sessionId z URL
+
+      if (idToJoin && playerName) {
+        ws.send(JSON.stringify({ action: 'joinSession', sessionId: idToJoin, playerName }));
       } else {
-        logMessage('No sessionId found. Create a session first.');
+        logMessage('No sessionId or playerName found. Make sure to create a session and enter a player name.');
       }
     };
 
     document.getElementById('submitEstimate').onclick = () => {
-      if (sessionId && playerId) {
-        ws.send(JSON.stringify({ action: 'submitEstimate', sessionId, playerId, estimate: 5 }));
+      const playerName = document.getElementById('playerName').value;
+      if (sessionId && playerName) {
+        ws.send(JSON.stringify({ action: 'submitEstimate', sessionId, playerName, estimate: 5 }));
       } else {
-        logMessage('No sessionId or playerId found.');
+        logMessage('No sessionId or playerName found.');
       }
     };
 

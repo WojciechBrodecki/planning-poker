@@ -1,4 +1,4 @@
-import { IGameSession, IPlayer, IRound } from "./interfaces";
+import { IGameSession, IRound } from "./interfaces";
 import SessionManager from "./SessionManager";
 
 class GameSessionManager {
@@ -12,27 +12,16 @@ class GameSessionManager {
     this.session = session;
   }
 
-  public addPlayer(playerName: string): IPlayer {
-    const newPlayer: IPlayer = {
-      name: playerName,
-      estimate: null,
-      confirmed: false,
-    };
-
-    this.session.players.push(newPlayer);
-    return newPlayer;
-  }
-
-  public submitEstimate(playerId: string, estimate: number): boolean {
-    const player = this.session.players.find(p => p.name === playerId);
+  public submitEstimate(playerName: string, estimate: number): boolean {
+    const player = this.session.players.find(p => p.name === playerName);
     if (!player || player.confirmed) return false;
 
     player.estimate = estimate;
     return true;
   }
 
-  public confirmEstimate(playerId: string): boolean {
-    const player = this.session.players.find(p => p.name === playerId);
+  public confirmEstimate(playerName: string, estimate: number): boolean {
+    const player = this.session.players.find(p => p.name === playerName);
     if (!player || player.estimate === null) return false;
 
     player.confirmed = true;

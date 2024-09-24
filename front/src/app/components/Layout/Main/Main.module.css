@@ -1,0 +1,43 @@
+.containerMain {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex: 1;
+}
+
+.containerTable {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(131, 182, 227);
+    color: rgb(255, 255, 255);
+    font-weight: 200;
+    font-size: 15px;
+    width: 225px;
+    height: 100px;
+    border-radius: 25px;
+    z-index: 1;
+}
+
+.containerPlayer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 15px;
+}
+
+.playerCard {
+    background-color: rgb(213, 213, 213);
+    width: 30px;
+    height: 45px;
+    border-radius: 5px;
+}
+
+.playerName {
+    font-size: 12px;
+    font-weight: bold;
+    padding-top: 5px;
+    color: rgb(57, 57, 57);
+}
